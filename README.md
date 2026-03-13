@@ -264,6 +264,35 @@ Once the server is running, interact with the API using tools like Postman, curl
   go test ./...
   ```
 
+### Docker Build
+- Just run below command and this will be done.
+  ```bash
+  docker compose up --build
+  ```
+
+### Build and enabling a debugger.
+- First if using vscode add below configuration in launch.json.
+  ```bash
+  {
+    "name": "Connect to Docker",
+    "type": "go",
+    "request": "attach",
+    "mode": "remote",
+    "port": 2345,
+    "host": "127.0.0.1",
+    "substitutePath": [
+      {
+        "from": "${workspaceFolder}/transaction-service", // Path to your local source code
+        "to": "/app" // Matches WORKDIR in your Dockerfile
+      }
+    ]
+  }
+  ```
+- Then run below command and debugger mode will be enabled with a build.
+  ```bash
+  docker-compose -f docker-compose.yaml -f docker-compose.debug.yaml up --build
+  ```
+
 ### Building for Production
 - Build a binary:
   ```bash
