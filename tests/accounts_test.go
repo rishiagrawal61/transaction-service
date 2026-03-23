@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"strconv"
 	"testing"
+	"time"
 
 	"transaction-service/dto"
 	"transaction-service/handlers"
@@ -37,9 +38,19 @@ func NewMockAccountRepository() *MockAccountRepository {
 
 func (m *MockAccountRepository) Insert(account models.Account) (models.Account, error) {
 	account.ID = m.nextID
+	account.CreatedAt = time.Now()
 	m.accounts[m.nextID] = account
 	m.nextID++
 	return account, nil
+}
+
+func (m *MockAccountRepository) FindByDocumentNumber(documentNumber string) (models.Account, error) {
+	for _, account := range m.accounts {
+		if account.DocumentNumber == documentNumber {
+			return account, nil
+		}
+	}
+	return models.Account{}, errors.New("account not found")
 }
 
 func (m *MockAccountRepository) FindByID(id string) (models.Account, error) {

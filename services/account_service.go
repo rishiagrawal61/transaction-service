@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"strconv"
 	"transaction-service/dto"
 	"transaction-service/models"
@@ -24,7 +25,11 @@ func (s *accountService) CreateAccount(req dto.CreateAccountRequest) (dto.Accoun
 	account := models.Account{
 		DocumentNumber: req.DocumentNumber,
 	}
-	account, err := s.repo.Insert(account)
+	_, err := s.repo.FindByDocumentNumber(req.DocumentNumber)
+	if err == nil {
+		return getAccountResponse(account), fmt.Errorf("account with document number %s already exists", req.DocumentNumber)
+	}
+	account, err = s.repo.Insert(account)
 	if err != nil {
 		return dto.AccountResponse{}, err
 	}

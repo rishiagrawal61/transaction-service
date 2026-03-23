@@ -23,6 +23,7 @@ func (h *TransactionHandler) CreateTransaction(w http.ResponseWriter, r *http.Re
 	var req dto.TransactionCreateDTO
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeError(w, http.StatusBadRequest, fmt.Errorf("handler.CreateTransaction, invalid request body: %w", err))
+		return
 	}
 
 	if errs := h.validator.ValidateTransactionRequest(req); len(errs) > 0 {

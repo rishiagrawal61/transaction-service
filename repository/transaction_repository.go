@@ -26,6 +26,10 @@ func (r *transactionRepository) Insert(transaction models.Transaction) (models.T
 	if err != nil {
 		return models.Transaction{}, err
 	}
+	err = r.db.QueryRow("SELECT created_at FROM transactions WHERE id = ?", id).Scan(&transaction.CreatedAt)
+	if err != nil {
+		return models.Transaction{}, err
+	}
 	transaction.TransactionId = id
 	return transaction, nil
 }

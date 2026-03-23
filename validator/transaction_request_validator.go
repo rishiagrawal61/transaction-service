@@ -21,6 +21,9 @@ func (t *TransactionValidator) ValidateTransactionRequest(req dto.TransactionCre
 	if req.Amount <= 0 {
 		errs["amount"] = "Amount must be greater than zero"
 	}
+	if req.Amount > 5000000 {
+		errs["amount"] = "Amount must not exceed 50,00,000 lacs"
+	}
 	if strings.TrimSpace(req.AccountID) == "" {
 		errs["account_id"] = "Account ID is required"
 	}

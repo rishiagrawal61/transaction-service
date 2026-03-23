@@ -11,6 +11,9 @@ func ValidateAccountCreateRequest(req dto.CreateAccountRequest) map[string]strin
 	if strings.TrimSpace(req.DocumentNumber) == "" {
 		errs["document_number"] = "Document number is required"
 	}
+	if len(req.DocumentNumber) > 20 {
+		errs["document_number"] = "Document number cannot exceed 20 characters"
+	}
 
 	if len(errs) > 0 {
 		return errs
